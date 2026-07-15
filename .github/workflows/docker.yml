@@ -24,3 +24,18 @@ jobs:
 
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/django-app:latest
+        
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull YOUR_DOCKERHUB_USERNAME/django-app:latest
+            docker stop django-app || true
+            docker rm django-app || true
+            docker run -d \
+              --name django-app \
+              -p 8000:8000 \
+              YOUR_DOCKERHUB_USERNAME/django-app:latest
