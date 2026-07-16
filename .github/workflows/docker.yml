@@ -32,11 +32,11 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker pull prasanna878/django-app:latest
+            docker pull prasannang27/django-app:latest
             docker stop django-app || true
             docker rm django-app || true
             docker run -d \
               --name django-app \
               -p 8000:8000 \
-              prasannang27/django-app
+              prasannang27/django-app:latest
           
